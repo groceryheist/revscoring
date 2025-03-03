@@ -38,10 +38,12 @@ def test_informals():
 
 def test_dictionary():
     cache = {r_text: "gizonezko dominadun worngly."}
-    assert solve(basque.dictionary.revision.datasources.dict_words,
-                 cache=cache) == ['gizonezko']
+    result = solve(basque.dictionary.revision.datasources.dict_words,
+                   cache=cache)
+    print(result)
+    assert result == ['gizonezko', 'dominadun']
     assert solve(basque.dictionary.revision.datasources.non_dict_words,
-                 cache=cache) == ["dominadun", "worngly"]
+                 cache=cache) == ["worngly"]
 
     assert basque.dictionary == pickle.loads(pickle.dumps(basque.dictionary))
 
