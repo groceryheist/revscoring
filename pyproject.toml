@@ -1,5 +1,5 @@
 [project]
-name = "revscoring-git"
+name = "revscoring"
 version = "3.0.0"
 description = "Add your description here"
 readme = "README.md"
