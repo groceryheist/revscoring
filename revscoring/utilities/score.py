@@ -11,7 +11,7 @@
               [--cache=<json>] [--caches=<json>]
               [--score-field=<key>]
               [--batch-size=<num>] [--io-workers=<num>] [--cpu-workers=<num>]
-              [--debug] [--verbose]
+              [--output-features] [--debug] [--verbose] 
 
     Options:
         -h --help           Print this documentation
@@ -37,7 +37,7 @@
                             requesting data from the API [default: <auto>]
         --cpu-workers=<num>  The number of worker processes to use for
                              extraction and scoring [default: <cpu-count>]
-
+        --output-features   Include the scaled features in the json output
         --debug             Print debug logging
         --verbose           Print feature extraction debug logging
 """
@@ -116,7 +116,8 @@ def main(argv=None):
 
     score_processor = ScoreProcessor(
         scoring_model, extractor, batch_size=batch_size,
-        cpu_workers=cpu_workers, io_workers=io_workers)
+        cpu_workers=cpu_workers, io_workers=io_workers,
+        output_features=args['--output-features'])
 
     run(score_processor, rev_docs, output, caches, cache, score_field, io_workers, debug, verbose)
 

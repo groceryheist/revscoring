@@ -134,7 +134,7 @@ class Classifier(model.Classifier):
 
         return {'seconds_elapsed': time.time() - start}
 
-    def score(self, feature_values):
+    def score(self, feature_values, return_features=False):
         """
         Generates a score for a single revision based on a set of extracted
         feature_values.
@@ -162,9 +162,12 @@ class Classifier(model.Classifier):
                 self.estimator.predict([scaled_fv_vector])[0])
 
         doc = {'prediction': prediction}
+        if return_features:
+            doc['features'] = scaled_fv_vector
+
         return util.normalize_json(doc)
 
-    def score_many(self, feature_values):
+    def score_many(self, feature_values, return_features=False):
         """
         Generates a score for a bunch of revisions based on a set of extracted
         feature_values.
@@ -192,9 +195,15 @@ class Classifier(model.Classifier):
             predictions = np.transpose(np.array(predictions))
         else:
             predictions = self.estimator.predict(scaled_fv_vectors)
-        for pred in predictions:
-            doc = {'prediction': self.label_normalizer.denormalize(pred)}
-            docs.append(util.normalize_json(doc))
+        if not return_features:
+            for pred in predictions:
+                doc = {'prediction': self.label_normalizer.denormalize(pred)}
+                docs.append(util.normalize_json(doc))
+        else:
+            for pred, scaled_fv_vector in zip( predictions, scaled_fv_vectors):
+                doc = {'prediction': self.label_normalizer.denormalize(pred),
+                       'features':scaled_fv_vector}
+                docs.append(util.normalize_json(doc))
         return docs
 
     def build_schema(self):
@@ -235,7 +244,7 @@ class ProbabilityClassifier(Classifier):
         super().__init__(features, labels, multilabel=multilabel,
                          statistics=statistics, **kwargs)
 
-    def score(self, feature_values):
+    def score(self, feature_values, return_features=False):
         """
         Generates a score for a single revision based on a set of extracted
         feature_values.
@@ -275,9 +284,12 @@ class ProbabilityClassifier(Classifier):
                            for label, proba in zip(labels, probas)}
 
         doc = {'prediction': prediction, 'probability': probability}
+        if return_features:
+            doc['features'] = scaled_fv_vector
+        
         return util.normalize_json(doc)
 
-    def score_many(self, feature_values):
+    def score_many(self, feature_values, return_features):
         """
         Generates a score for a bunch of revisions based on a set of extracted
         feature_values.
@@ -327,10 +339,22 @@ class ProbabilityClassifier(Classifier):
             for prob in probas:
                 probabilities.append({label: prob
                                       for label, prob in zip(labels, prob)})
-        for pred, prob in zip(predictions, probabilities):
-            preds = self.label_normalizer.denormalize(pred)
-            doc = {'prediction': preds, 'probability': prob}
-            docs.append(util.normalize_json(doc))
+        if not return_features:
+            for pred, prob in zip(predictions, probabilities):
+                preds = self.label_normalizer.denormalize(pred)
+                doc = {'prediction': preds, 'probability': prob}
+                docs.append(util.normalize_json(doc))
+        else:
+            for pred, prob, scaled_fv_vector in zip(predictions,
+                                                    probabilities,
+                                                    scaled_fv_vector):
+
+                preds = self.label_normalizer.denormalize(pred)
+                doc = {'prediction': preds,
+                       'probability': prob,
+                       'features': scaled_fv_vector}
+                docs.append(util.normalize_json(doc))
+
         return docs
 
     def build_schema(self):

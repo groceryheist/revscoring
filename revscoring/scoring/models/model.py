@@ -57,7 +57,7 @@ class Model:
         if statistics is not None:
             self.info['statistics'] = statistics
 
-    def score(self, feature_values):
+    def score(self, feature_values, return_features):
         """
         Make a prediction or otherwise use the model to generate a score.
 
@@ -67,7 +67,8 @@ class Model:
                 `Feature` s provided to the constructor
 
         :Returns:
-            A `dict` of statistics
+            A `dict` of statistics,
+            if return_features is True, the features are in the dict.
         """
         raise NotImplementedError()
 

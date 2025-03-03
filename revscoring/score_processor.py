@@ -17,12 +17,13 @@ class ScoreProcessor:
     MAX_IO_WORKERS = 10
 
     def __init__(self, scoring_model, extractor, cpu_workers=None,
-                 io_workers=None, batch_size=50):
+                 io_workers=None, batch_size=50, output_features=False):
         self.scoring_model = scoring_model
         self.extractor = extractor
         self.cpu_workers = \
             int(cpu_workers) if cpu_workers is not None else cpu_count()
         self.batch_size = int(batch_size)
+        self.output_features = output_features
 
         if io_workers is not None:
             self.io_workers = int(io_workers)
@@ -105,7 +106,7 @@ class ScoreProcessor:
                 return rev_id, error_score(error)
 
             try:
-                score = scoring_model.score(feature_values)
+                score = scoring_model.score(feature_values, self.output_features)
                 return rev_id, score
             except Exception as error:
                 logger.debug("An error occured during scoring")
