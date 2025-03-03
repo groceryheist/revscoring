@@ -1,10 +1,11 @@
 pip-install: requirements.txt test-requirements.txt
-	pip install -r requirements.txt
-	pip install -r test-requirements.txt
+	uv sync
+	uv pip install -e .
 
 .PHONY: run-tests
 run-tests:
-	python3 -m pytest tests/ -v --cov
+	uv run python3 -m pytest tests/
+
 
 .PHONY: setup-image
 setup-image:
