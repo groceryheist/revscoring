@@ -1,5 +1,5 @@
 import json
-from pkg_resources import resource_filename
+from importlib import resources as importlib_resources
 
 from .features import Dictionary, SubstringMatches, Stemmed, Stopwords, \
     RegexMatches
@@ -271,7 +271,7 @@ words_to_watch = RegexMatches(name + ".words_to_watch", words_to_watch_regexes)
 problematic words and phrases for use in reference text
 """
 
-filepath = resource_filename('revscoring', 'assets/enwiktionary_idioms.txt')
+filepath = importlib_resources.files('revscoring') / 'assets/enwiktionary_idioms.txt'
 with open(filepath) as f:
     idioms_list = [json.loads(line) for line in f]
 

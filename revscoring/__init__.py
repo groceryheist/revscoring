@@ -137,8 +137,6 @@ Example:
 import platform
 import sys
 
-from pkg_resources import VersionConflict
-
 from .about import (__author__, __author_email__, __description__, __name__,
                     __url__, __version__)
 from .datasources import Datasource
@@ -149,7 +147,7 @@ from .score_processor import ScoreProcessor
 from .scoring import Model
 
 if sys.version_info <= (3, 0):
-    raise VersionConflict(
+    raise Error(
         "Revscoring requires Python '>=3' " +
         "but your Python version is " +
         platform.python_version())
