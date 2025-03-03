@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.02.25]
+
+* Start migration to uv and updated python + dependencies.
+** Fixed test_basque which broke due to an updated disctionary.
+
 ## [2.11.13]
 * Force mwparserfromhell to use version older than 0.6.5 as there was a memory leak solved. 
   https://github.com/earwig/mwparserfromhell/pull/303
