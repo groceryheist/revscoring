@@ -289,7 +289,7 @@ class ProbabilityClassifier(Classifier):
         
         return util.normalize_json(doc)
 
-    def score_many(self, feature_values, return_features):
+    def score_many(self, feature_values, return_features=False):
         """
         Generates a score for a bunch of revisions based on a set of extracted
         feature_values.

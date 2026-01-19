@@ -26,7 +26,7 @@ dependencies = [
     "pytz>=2017.2",
     "requests>=2.0.0,<2.999.999",
     "scikit-learn>=1.0.2",
-    "scipy>=1.5.4,<1.10.1",
+    "scipy>=1.5.4",
     "tabulate>=0.9.0,<0.9.999",
     "tqdm>=4.5.0",
     "yamlconf-wmf==0.2.10",
